@@ -1,4 +1,4 @@
-XmlDSig<?xml version="1.0"?>
+<?xml version="1.0"?>
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
 
@@ -15,6 +15,7 @@ XmlDSig<?xml version="1.0"?>
     <file>src</file>
     <file>tests</file>
 
-    <!-- Include all rules from the Charon Coding Standard -->
-    <rule ref="Charon"/>
+    <rule ref="PSR12"/>
+    <rule ref="Generic.PHP.RequireStrictTypes"/>
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
 </ruleset>

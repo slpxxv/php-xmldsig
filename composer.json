@@ -3,17 +3,17 @@
     "license": "MIT",
     "type": "library",
     "require": {
+        "php": "^8.2",
         "ext-dom": "*",
         "ext-openssl": "*",
         "nuldark/stdlib": "^2.3",
         "starkbank/ecdsa": "^2.0"
     },
     "require-dev": {
-        "charonlab/coding-standard": "1.2.x-dev",
-        "phpunit/phpunit": "^11.1@dev",
-        "vimeo/psalm": "6.x-dev"
+        "phpunit/phpunit": "^11.5",
+        "squizlabs/php_codesniffer": "^3.10",
+        "vimeo/psalm": "^6.0"
     },
-    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "XmlDSig\\": "src/"
@@ -25,18 +25,16 @@
         }
     },
     "config": {
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        },
         "optimize-autoloader": true,
         "platform": {
-            "php": "8.2.15"
+            "php": "8.2.27"
         },
         "sort-packages": true
     },
     "scripts": {
         "lint-check": "phpcs",
         "lint-fix": "phpcbf",
-        "static-analysis": "psalm --shepherd --stats"
+        "static-analysis": "psalm --shepherd --stats",
+        "test": "phpunit"
     }
 }
