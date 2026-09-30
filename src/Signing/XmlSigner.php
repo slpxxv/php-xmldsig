@@ -51,7 +51,11 @@ final readonly class XmlSigner
         $request->placement->place($signature->element);
         try {
             // Canonicalized in place, so inclusive C14N sees the ancestors' namespaces like a verifier does.
-            $octets = $this->canonicalizer->canonicalize($signature->signedInfo(), $request->canonicalization);
+            $octets = $this->canonicalizer->canonicalize(
+                $signature->signedInfo(),
+                $signedInfo->canonicalization,
+                $signedInfo->inclusiveNamespaces,
+            );
             $signature->setSignatureValue(
                 $this->signatureMethods
                     ->for($request->signingKey->algorithm)

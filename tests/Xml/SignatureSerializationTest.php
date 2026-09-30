@@ -55,6 +55,7 @@ final class SignatureSerializationTest extends TestCase
                         'urn:type',
                     ),
                 ],
+                ['acme', '#default'],
             ),
             \random_bytes(256),
             new KeyInfo('key-1', [\random_bytes(100)]),

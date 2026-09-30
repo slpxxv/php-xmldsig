@@ -25,6 +25,7 @@ final readonly class SigningRequest
 
     /**
      * @param list<ReferenceDefinition> $references
+     * @param list<string> $inclusiveNamespaces Prefixes kept by exclusive C14N of SignedInfo.
      *
      * @throws InvalidSigningRequest
      */
@@ -35,6 +36,7 @@ final readonly class SigningRequest
         public CanonicalizationAlgorithm $canonicalization = CanonicalizationAlgorithm::Exclusive,
         public ?KeyInfoSource $keyInfo = null,
         public ?string $signatureId = null,
+        public array $inclusiveNamespaces = [],
     ) {
         if ($references === []) {
             throw InvalidSigningRequest::noReferences();

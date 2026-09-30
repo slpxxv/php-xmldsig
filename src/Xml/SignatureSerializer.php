@@ -43,8 +43,9 @@ final class SignatureSerializer
     private function signedInfo(\DOMDocument $document, SignedInfo $signedInfo): \DOMElement
     {
         $element = $this->element($document, 'SignedInfo');
-        $canonicalization = $signedInfo->canonicalization->value;
-        $element->appendChild($this->algorithm($document, 'CanonicalizationMethod', $canonicalization));
+        $canonicalization = $this->algorithm($document, 'CanonicalizationMethod', $signedInfo->canonicalization->value);
+        $this->appendInclusiveNamespaces($document, $canonicalization, $signedInfo->inclusiveNamespaces);
+        $element->appendChild($canonicalization);
         $element->appendChild($this->algorithm($document, 'SignatureMethod', $signedInfo->signatureAlgorithm->value));
         foreach ($signedInfo->references as $reference) {
             $element->appendChild($this->reference($document, $reference));
@@ -80,16 +81,26 @@ final class SignatureSerializer
     private function transform(\DOMDocument $document, TransformSpec $transform): \DOMElement
     {
         $element = $this->algorithm($document, 'Transform', $transform->algorithm);
-        if ($transform->inclusiveNamespaces !== []) {
-            $inclusive = $document->createElementNS(
-                XmlNamespace::Ec->value,
-                XmlNamespace::Ec->qualify('InclusiveNamespaces'),
-            );
-            $inclusive->setAttribute('PrefixList', \implode(' ', $transform->inclusiveNamespaces));
-            $element->appendChild($inclusive);
-        }
+        $this->appendInclusiveNamespaces($document, $element, $transform->inclusiveNamespaces);
 
         return $element;
+    }
+
+    /**
+     * @param list<string> $prefixes
+     */
+    private function appendInclusiveNamespaces(\DOMDocument $document, \DOMElement $parent, array $prefixes): void
+    {
+        if ($prefixes === []) {
+            return;
+        }
+
+        $inclusive = $document->createElementNS(
+            XmlNamespace::Ec->value,
+            XmlNamespace::Ec->qualify('InclusiveNamespaces'),
+        );
+        $inclusive->setAttribute('PrefixList', \implode(' ', $prefixes));
+        $parent->appendChild($inclusive);
     }
 
     private function keyInfo(\DOMDocument $document, KeyInfo $keyInfo): \DOMElement

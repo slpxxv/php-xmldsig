@@ -77,6 +77,28 @@ final class XmlVerifierTest extends TestCase
         self::assertFalse($verified->covers($this->root($document)));
     }
 
+    public function testSignedInfoInclusiveNamespacesAreSignedAndHonoured(): void
+    {
+        $pem = Keys::rsaPrivatePem();
+        $document = new \DOMDocument();
+        $document->loadXML(self::XML);
+        XmlDSig::signer()->sign($document, new SigningRequest(
+            new SigningKey(PrivateKey::fromPem($pem), SignatureAlgorithm::RsaSha256),
+            [ReferenceDefinition::enveloped('#inv-1')],
+            new AppendToElement($this->element($document, 'invoice')),
+            inclusiveNamespaces: ['acme'],
+        ));
+        $document = $this->reload($document);
+
+        $verified = $this->verifier($pem)->verify($document);
+        self::assertSame(['acme'], $verified->signature->signedInfo->inclusiveNamespaces);
+
+        $this->element($document, 'InclusiveNamespaces')->setAttribute('PrefixList', '');
+        $this->expectExceptionObject(VerificationFailed::invalidSignatureValue());
+
+        $this->verifier($pem)->verify($document);
+    }
+
     public function testPinnedCertificateIsAccepted(): void
     {
         $pem = Keys::rsaPrivatePem();

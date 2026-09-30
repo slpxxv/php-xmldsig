@@ -55,10 +55,13 @@ final class SignatureParser
             throw MalformedSignature::because('ds:SignedInfo must contain at least one ds:Reference.');
         }
 
+        $canonicalization = SignatureElement::requireChild($element, 'CanonicalizationMethod');
+
         return new SignedInfo(
-            CanonicalizationAlgorithm::fromUri($this->algorithm($element, 'CanonicalizationMethod')),
+            CanonicalizationAlgorithm::fromUri($this->requireAttribute($canonicalization, 'Algorithm')),
             SignatureAlgorithm::fromUri($this->algorithm($element, 'SignatureMethod')),
             $references,
+            $this->inclusiveNamespaces($canonicalization),
         );
     }
 
@@ -85,13 +88,22 @@ final class SignatureParser
 
     private function transform(\DOMElement $element): TransformSpec
     {
-        $prefixes = [];
+        return new TransformSpec($this->requireAttribute($element, 'Algorithm'), $this->inclusiveNamespaces($element));
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function inclusiveNamespaces(\DOMElement $element): array
+    {
         $inclusive = SignatureElement::children($element, 'InclusiveNamespaces', XmlNamespace::Ec)[0] ?? null;
-        if ($inclusive !== null) {
-            $prefixes = \preg_split('/\s+/', \trim($inclusive->getAttribute('PrefixList')), -1, \PREG_SPLIT_NO_EMPTY);
+        if ($inclusive === null) {
+            return [];
         }
 
-        return new TransformSpec($this->requireAttribute($element, 'Algorithm'), $prefixes === false ? [] : $prefixes);
+        $prefixes = \preg_split('/\s+/', \trim($inclusive->getAttribute('PrefixList')), -1, \PREG_SPLIT_NO_EMPTY);
+
+        return $prefixes === false ? [] : $prefixes;
     }
 
     private function keyInfo(\DOMElement $element): KeyInfo

@@ -62,7 +62,11 @@ final readonly class XmlVerifier
             throw VerificationFailed::keyAlgorithmMismatch();
         }
 
-        $octets = $this->canonicalizer->canonicalize($element->signedInfo(), $model->signedInfo->canonicalization);
+        $octets = $this->canonicalizer->canonicalize(
+            $element->signedInfo(),
+            $model->signedInfo->canonicalization,
+            $model->signedInfo->inclusiveNamespaces,
+        );
         if (!$this->signatureMethods->for($algorithm)->verify($octets, $model->signatureValue, $key, $algorithm)) {
             throw VerificationFailed::invalidSignatureValue();
         }

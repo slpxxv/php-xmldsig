@@ -20,11 +20,13 @@ final readonly class SignedInfo
 {
     /**
      * @param non-empty-list<Reference> $references
+     * @param list<string> $inclusiveNamespaces ec:InclusiveNamespaces of the CanonicalizationMethod.
      */
     public function __construct(
         public CanonicalizationAlgorithm $canonicalization,
         public SignatureAlgorithm $signatureAlgorithm,
         public array $references,
+        public array $inclusiveNamespaces = [],
     ) {
     }
 }

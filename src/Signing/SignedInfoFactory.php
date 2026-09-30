@@ -46,6 +46,11 @@ final readonly class SignedInfoFactory
             $request->references,
         );
 
-        return new SignedInfo($request->canonicalization, $request->signingKey->algorithm, $references);
+        return new SignedInfo(
+            $request->canonicalization,
+            $request->signingKey->algorithm,
+            $references,
+            $request->canonicalization->isExclusive() ? $request->inclusiveNamespaces : [],
+        );
     }
 }
