@@ -98,8 +98,8 @@ final class XmlSecLibsInteropTest extends TestCase
         $dsig->sign($key, $invoice);
         $dsig->add509Cert($certificatePem);
 
-        $verified = XmlDSig::verifier(new PinnedCertificateResolver(X509Certificate::fromPem($certificatePem)))
-            ->verify($this->reload($document));
+        $trusted = X509Certificate::fromPem($certificatePem);
+        $verified = XmlDSig::verifier(new PinnedCertificateResolver([$trusted]))->verify($this->reload($document));
 
         self::assertCount(1, $verified->signedNodes);
     }

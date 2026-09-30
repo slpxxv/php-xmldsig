@@ -42,7 +42,6 @@ use XmlDSigTests\Fixtures\Keys;
 #[CoversClass(VerifiedSignature::class)]
 #[CoversClass(SignatureLocator::class)]
 #[CoversClass(StaticKeyResolver::class)]
-#[CoversClass(PinnedCertificateResolver::class)]
 #[CoversClass(VerificationFailed::class)]
 #[CoversClass(XmlDSig::class)]
 final class XmlVerifierTest extends TestCase
@@ -83,7 +82,7 @@ final class XmlVerifierTest extends TestCase
         $pem = Keys::rsaPrivatePem();
         $certificate = X509Certificate::fromPem(Keys::certificatePem($pem));
 
-        $verified = XmlDSig::verifier(new PinnedCertificateResolver($certificate))
+        $verified = XmlDSig::verifier(new PinnedCertificateResolver([$certificate]))
             ->verify($this->sign($pem, certificate: $certificate));
 
         self::assertCount(1, $verified->signedNodes);
@@ -98,8 +97,8 @@ final class XmlVerifierTest extends TestCase
 
         $this->expectExceptionObject(VerificationFailed::untrustedKey());
 
-        XmlDSig::verifier(new PinnedCertificateResolver(X509Certificate::fromPem(Keys::certificatePem($pem))))
-            ->verify($document);
+        $trusted = X509Certificate::fromPem(Keys::certificatePem($pem));
+        XmlDSig::verifier(new PinnedCertificateResolver([$trusted]))->verify($document);
     }
 
     public function testModifiedContentIsRejected(): void

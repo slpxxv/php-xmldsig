@@ -50,6 +50,11 @@ final class VerificationFailed extends \RuntimeException implements XmlDSigExcep
         return new self('The key provided in ds:KeyInfo is not trusted.');
     }
 
+    public static function certificateNotValid(): self
+    {
+        return new self('The trusted certificate is expired or not yet valid.');
+    }
+
     public static function keyAlgorithmMismatch(): self
     {
         return new self('The verification key does not match the signature algorithm.');

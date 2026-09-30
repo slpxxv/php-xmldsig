@@ -47,7 +47,7 @@ use XmlDSig\Key\X509Certificate;
 use XmlDSig\Verification\KeyResolver\PinnedCertificateResolver;
 use XmlDSig\XmlDSig;
 
-$verified = XmlDSig::verifier(new PinnedCertificateResolver(X509Certificate::fromFile('partner.pem')))
+$verified = XmlDSig::verifier(new PinnedCertificateResolver([X509Certificate::fromFile('partner.pem')]))
     ->verify($document);
 
 // Only trust what the signature actually covers.

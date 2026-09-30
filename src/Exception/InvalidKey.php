@@ -25,6 +25,11 @@ final class InvalidKey extends \InvalidArgumentException implements XmlDSigExcep
         return new self(\sprintf('The file "%s" does not exist or is not readable.', $path));
     }
 
+    public static function noTrustedCertificates(): self
+    {
+        return new self('At least one trusted certificate is required.');
+    }
+
     public static function unsupportedType(): self
     {
         return new self('Only RSA and EC keys are supported.');

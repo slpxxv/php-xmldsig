@@ -28,7 +28,8 @@ final readonly class X509Certificate
      */
     public static function fromPem(string $pem): self
     {
-        $certificate = \openssl_x509_read($pem);
+        // Untrusted input (ds:X509Certificate) must fail with InvalidKey, not a PHP warning.
+        $certificate = @\openssl_x509_read($pem);
         if ($certificate === false) {
             throw InvalidKey::unreadable('certificate', OpenSsl::lastError());
         }
@@ -85,8 +86,34 @@ final readonly class X509Certificate
         return \hash('sha256', $this->toDer(), true);
     }
 
+    public function validFrom(): \DateTimeImmutable
+    {
+        return $this->time('validFrom_time_t');
+    }
+
+    public function validTo(): \DateTimeImmutable
+    {
+        return $this->time('validTo_time_t');
+    }
+
+    public function isValidAt(\DateTimeInterface $moment): bool
+    {
+        return $moment >= $this->validFrom() && $moment <= $this->validTo();
+    }
+
     public function equals(self $other): bool
     {
         return \hash_equals($this->fingerprint(), $other->fingerprint());
+    }
+
+    private function time(string $field): \DateTimeImmutable
+    {
+        $parsed = \openssl_x509_parse($this->certificate);
+        $timestamp = $parsed === false ? null : ($parsed[$field] ?? null);
+        if (!\is_int($timestamp)) {
+            throw InvalidKey::unreadable('certificate validity', OpenSsl::lastError());
+        }
+
+        return new \DateTimeImmutable('@' . $timestamp);
     }
 }
