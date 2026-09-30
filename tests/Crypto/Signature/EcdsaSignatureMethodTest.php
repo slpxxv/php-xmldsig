@@ -56,21 +56,25 @@ final class EcdsaSignatureMethodTest extends SignatureMethodContractTestCase
         EcdsaSignatureFormat::derToRaw("\x30\x05\x02\x01\x01", 32);
     }
 
+    #[\Override]
     protected function method(): SignatureMethod
     {
         return new EcdsaSignatureMethod();
     }
 
+    #[\Override]
     protected function algorithm(): SignatureAlgorithm
     {
         return SignatureAlgorithm::EcdsaSha256;
     }
 
+    #[\Override]
     protected function key(): PrivateKey
     {
         return PrivateKey::fromPem(Keys::ecPrivatePem());
     }
 
+    #[\Override]
     protected function foreignKey(): PrivateKey
     {
         return PrivateKey::fromPem(Keys::rsaPrivatePem());

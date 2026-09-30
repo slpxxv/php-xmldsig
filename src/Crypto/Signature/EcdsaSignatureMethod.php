@@ -26,11 +26,13 @@ use XmlDSig\Key\PublicKey;
  */
 final class EcdsaSignatureMethod implements SignatureMethod
 {
+    #[\Override]
     public function supports(SignatureAlgorithm $algorithm): bool
     {
         return $algorithm->keyType() === KeyType::Ec;
     }
 
+    #[\Override]
     public function sign(string $data, PrivateKey $key, SignatureAlgorithm $algorithm): string
     {
         $this->assertKeyType($key->type, $algorithm);
@@ -42,6 +44,7 @@ final class EcdsaSignatureMethod implements SignatureMethod
         return EcdsaSignatureFormat::derToRaw($der, self::coordinateLength($key->bits));
     }
 
+    #[\Override]
     public function verify(string $data, string $signature, PublicKey $key, SignatureAlgorithm $algorithm): bool
     {
         $this->assertKeyType($key->type, $algorithm);

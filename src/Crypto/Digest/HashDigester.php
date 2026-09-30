@@ -17,6 +17,7 @@ use XmlDSig\Algorithm\DigestAlgorithm;
 
 final class HashDigester implements Digester
 {
+    #[\Override]
     public function digest(string $data, DigestAlgorithm $algorithm): string
     {
         return \hash($algorithm->hashName(), $data, true);

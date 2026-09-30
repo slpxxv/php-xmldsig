@@ -30,21 +30,25 @@ final class RsaSignatureMethodTest extends SignatureMethodContractTestCase
         self::assertSame(1, \openssl_verify('payload', $signature, $this->key()->publicKey()->handle(), 'sha512'));
     }
 
+    #[\Override]
     protected function method(): SignatureMethod
     {
         return new RsaSignatureMethod();
     }
 
+    #[\Override]
     protected function algorithm(): SignatureAlgorithm
     {
         return SignatureAlgorithm::RsaSha256;
     }
 
+    #[\Override]
     protected function key(): PrivateKey
     {
         return PrivateKey::fromPem(Keys::rsaPrivatePem());
     }
 
+    #[\Override]
     protected function foreignKey(): PrivateKey
     {
         return PrivateKey::fromPem(Keys::ecPrivatePem());

@@ -26,6 +26,7 @@ final readonly class SameDocumentResolver implements ReferenceResolver
     ) {
     }
 
+    #[\Override]
     public function resolve(string $uri, \DOMDocument $document): \DOMNode
     {
         if ($uri === '' || $uri === '#xpointer(/)') {

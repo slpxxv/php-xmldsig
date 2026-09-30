@@ -70,7 +70,7 @@ final readonly class TransformData
         $restore = [];
         foreach ($this->excluded as $node) {
             $parent = $node->parentNode;
-            if ($parent !== null && $this->isInsideRoot($node)) {
+            if ($parent !== null && $this->isInsideRoot($node, $this->root)) {
                 $restore[] = [$node, $parent, $node->nextSibling];
                 $parent->removeChild($node);
             }
@@ -85,10 +85,10 @@ final readonly class TransformData
         }
     }
 
-    private function isInsideRoot(\DOMNode $node): bool
+    private function isInsideRoot(\DOMNode $node, \DOMNode $root): bool
     {
         for ($current = $node->parentNode; $current !== null; $current = $current->parentNode) {
-            if ($current->isSameNode($this->root)) {
+            if ($current->isSameNode($root)) {
                 return true;
             }
         }

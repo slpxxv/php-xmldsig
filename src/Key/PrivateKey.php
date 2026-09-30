@@ -50,11 +50,12 @@ final readonly class PrivateKey
     public function publicKey(): PublicKey
     {
         $details = \openssl_pkey_get_details($this->key);
-        if ($details === false || !\is_string($details['key'] ?? null)) {
+        $pem = $details === false ? null : ($details['key'] ?? null);
+        if (!\is_string($pem)) {
             throw InvalidKey::unreadable('public part of the private key', OpenSsl::lastError());
         }
 
-        return PublicKey::fromPem($details['key']);
+        return PublicKey::fromPem($pem);
     }
 
     /**

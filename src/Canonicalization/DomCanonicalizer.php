@@ -18,6 +18,7 @@ use XmlDSig\Exception\TransformFailed;
 
 final class DomCanonicalizer implements Canonicalizer
 {
+    #[\Override]
     public function canonicalize(
         \DOMNode $node,
         CanonicalizationAlgorithm $algorithm,

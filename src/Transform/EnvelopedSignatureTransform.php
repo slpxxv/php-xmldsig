@@ -20,6 +20,7 @@ use XmlDSig\Exception\TransformFailed;
  */
 final class EnvelopedSignatureTransform implements Transform
 {
+    #[\Override]
     public function apply(TransformData $data, ?\DOMElement $signature): TransformData
     {
         if (!$data->isNodeSet()) {

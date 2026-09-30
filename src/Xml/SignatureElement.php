@@ -99,7 +99,7 @@ final readonly class SignatureElement
         $children = self::children($parent, $localName);
         if (\count($children) !== 1) {
             throw MalformedSignature::because(
-                \sprintf('expected exactly one ds:%s in ds:%s.', $localName, (string) $parent->localName),
+                \sprintf('expected exactly one ds:%s in ds:%s.', $localName, $parent->localName),
             );
         }
 
@@ -114,7 +114,7 @@ final readonly class SignatureElement
         $children = self::children($parent, $localName);
         if (\count($children) > 1) {
             throw MalformedSignature::because(
-                \sprintf('expected at most one ds:%s in ds:%s.', $localName, (string) $parent->localName),
+                \sprintf('expected at most one ds:%s in ds:%s.', $localName, $parent->localName),
             );
         }
 

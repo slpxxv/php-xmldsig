@@ -29,6 +29,7 @@ final readonly class CanonicalizationTransform implements Transform
     ) {
     }
 
+    #[\Override]
     public function apply(TransformData $data, ?\DOMElement $signature): TransformData
     {
         if (!$data->isNodeSet()) {

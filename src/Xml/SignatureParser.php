@@ -91,7 +91,7 @@ final class SignatureParser
             $prefixes = \preg_split('/\s+/', \trim($inclusive->getAttribute('PrefixList')), -1, \PREG_SPLIT_NO_EMPTY);
         }
 
-        return new TransformSpec($this->requireAttribute($element, 'Algorithm'), $prefixes ?: []);
+        return new TransformSpec($this->requireAttribute($element, 'Algorithm'), $prefixes === false ? [] : $prefixes);
     }
 
     private function keyInfo(\DOMElement $element): KeyInfo
