@@ -10,7 +10,7 @@ built on `ext-dom` and `ext-openssl` only.
 ## Installation
 
 ```bash
-composer require sxbrsky/xmldsig
+composer require slpxxv/php-xmldsig
 ```
 
 ## Signing
@@ -95,7 +95,7 @@ composer static-analysis
 
 ## Support
 
-- [Issues](https://github.com/sxbrsky/php-xmldsig/issues/)
+- [Issues](https://github.com/slpxxv/php-xmldsig/issues/)
 
 ## License
 

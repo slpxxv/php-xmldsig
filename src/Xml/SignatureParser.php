@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the sxbrsky/xmldsig.
+ * This file is part of the slpxxv/php-xmldsig.
  *
  * Copyright (C) 2023 Dominik Szamburski
  *

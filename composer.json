@@ -1,7 +1,29 @@
 {
-    "name": "sxbrsky/xmldsig",
+    "name": "slpxxv/php-xmldsig",
+    "description": "XML Digital Signature (XMLDSig) signing and verification built on ext-dom and ext-openssl.",
     "license": "MIT",
     "type": "library",
+    "keywords": [
+        "xmldsig",
+        "xml",
+        "signature",
+        "digital signature",
+        "c14n",
+        "x509",
+        "rsa",
+        "ecdsa",
+        "saml"
+    ],
+    "homepage": "https://github.com/slpxxv/php-xmldsig",
+    "authors": [
+        {
+            "name": "Dominik Szamburski"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/slpxxv/php-xmldsig/issues",
+        "source": "https://github.com/slpxxv/php-xmldsig"
+    },
     "require": {
         "php": "^8.2",
         "ext-dom": "*",
