@@ -24,6 +24,10 @@ use XmlDSig\Signing\SignedInfoFactory;
 use XmlDSig\Signing\XmlSigner;
 use XmlDSig\Transform\TransformPipeline;
 use XmlDSig\Transform\TransformRegistry;
+use XmlDSig\Verification\KeyResolver\KeyResolver;
+use XmlDSig\Verification\SignatureLocator;
+use XmlDSig\Verification\XmlVerifier;
+use XmlDSig\Xml\SignatureParser;
 use XmlDSig\Xml\SignatureSerializer;
 
 /**
@@ -40,6 +44,24 @@ final class XmlDSig
             new SignatureSerializer(),
             $canonicalizer,
             SignatureMethodRegistry::default(),
+            $policy ?? AlgorithmPolicy::secure(),
+        );
+    }
+
+    public static function verifier(
+        KeyResolver $keyResolver,
+        ?AlgorithmPolicy $policy = null,
+        ?IdAttributes $idAttributes = null,
+    ): XmlVerifier {
+        $canonicalizer = new DomCanonicalizer();
+
+        return new XmlVerifier(
+            new SignatureLocator(),
+            new SignatureParser(),
+            $keyResolver,
+            $canonicalizer,
+            SignatureMethodRegistry::default(),
+            self::referenceDigester($idAttributes, $canonicalizer),
             $policy ?? AlgorithmPolicy::secure(),
         );
     }
