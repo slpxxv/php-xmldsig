@@ -140,7 +140,9 @@ final class XmlVerifierTest extends TestCase
         $original = $this->element($document, 'invoice');
         $evil = $original->cloneNode(true);
         \assert($evil instanceof \DOMElement);
-        $evil->getElementsByTagName('amount')->item(0)?->replaceChildren('1000000');
+        $amount = $evil->getElementsByTagName('amount')->item(0);
+        \assert($amount !== null);
+        $amount->textContent = '1000000';
         $copiedSignature = $evil->getElementsByTagNameNS('http://www.w3.org/2000/09/xmldsig#', 'Signature')->item(0);
         \assert($copiedSignature !== null);
         $evil->removeChild($copiedSignature);
