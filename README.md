@@ -67,6 +67,16 @@ Key resolvers:
 | `PinnedCertificateResolver` | The document embeds a certificate that must match one you trust |
 | your own `KeyResolver` | You need PKI chain validation, a key store, HSM lookup, ... |
 
+## Security notes
+
+- Load untrusted XML without entity expansion or network access:
+  `$document->loadXML($xml, LIBXML_NONET)`; never pass `LIBXML_NOENT` or `LIBXML_DTDLOAD`.
+- Process only nodes for which `$verified->covers($node)` is true. A valid signature elsewhere in the
+  document says nothing about the element you read (signature wrapping).
+- Duplicate IDs make verification fail; configure the ID attribute names with `IdAttributes` when your
+  format uses something other than `ID`, `Id`, `id` or `xml:id`.
+- `AlgorithmPolicy::secure()` is the default; use `AlgorithmPolicy::legacy()` only for SHA-1 peers.
+
 ## Architecture
 
 ```
